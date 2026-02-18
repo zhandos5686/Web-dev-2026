@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        let user = {
+            name: "John",
+            surname: "Smith"
+        }
+        alert(user.name);
+        user.name = "Pete";
+        alert(user.name);
+        delete user.name;
+        function isEmpty(x){
+            if(x===undefined) return true;
+            else return false;
+        }
+        if(isEmpty(user.surname)) alert("There is no surname");
+        else alert("U have surname");
+        let salaries = {
+        John: 100,
+        Ann: 160,
+        Pete: 130
+        }
+        let sum = 0;
+        for(let x in salaries){
+            sum = sum + salaries[x];
+        }
+        alert(sum);
+        function multiplyNumeric(obj){
+            for(let x in obj){
+                obj[x] = obj[x]*2;
+            }
+        }
+        multiplyNumeric(salaries);
+        for(let x in salaries){
+            alert(salaries[x]);
+        }
+
+        let calculator = {
+            read(){
+                this.a = +prompt('a?', 0);
+                this.b = +prompt('b?', 0);
+            },
+            sum(){
+                return(this.a+this.b);
+            },
+            mul(){
+                return(this.a*this.b);
+            }
+        };
+
+        calculator.read();
+        alert( calculator.sum() );
+        alert( calculator.mul() );
+
+        let ladder = {
+            step: 0,
+            up() {
+                this.step++;
+                return this;
+            },
+            down() {
+                this.step--;
+                return this;
+            },
+            showStep() {
+                alert( this.step );
+                return this;
+            }
+        };
+
+        ladder.up().up().down().showStep().down().showStep(); // shows 1 then 0
+
+    </script>
+</body>
+</html>

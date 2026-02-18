@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script src="alert.js"></script>
+    <script>
+        alert("I am javascript")
+    </script>
+    <script>
+        let admin, name;
+        name = "John";
+        admin = name;
+        alert(admin);
+        let earth = "Earth", account = "Zhandos";
+        const BIRTHDAY = '18.04.1982';
+
+        const age = someCode(BIRTHDAY);
+    
+        name = "Ilya";
+
+        alert( `hello ${1}` );
+
+        alert( `hello ${"name"}` );
+
+        alert( `hello ${name}` );
+        </script>
+        <script>
+        let acme = prompt("Name?", "");
+        alert(acme);
+
+        let a = 1, b = 1;
+
+        alert( ++a ); // 2, prefix form returns the new value
+        alert( b++ ); // 1, postfix form returns the old value
+
+        alert( a ); // 2, incremented once
+        alert( b ); // 2, incremented once
+        </script>
+        <script>
+        let ax = 2;
+
+        let x = 1 + (ax *= 2);
+        </script>
+        <script>
+        let ar = Number(prompt("First number?", 1));
+        let br = Number(prompt("Second number?", 2));
+
+        alert(ar + br); // 12
+        </script>   
+        <script>
+            alert( null || 2 || undefined ); // 2
+            alert( alert(1) || 2 || alert(3) ); //1 then 2
+            alert( 1 && null && 2 ); //null
+            alert( alert(1) && alert(2) ); //1 then undefined
+            alert( null || 2 && 3 || 4 ); //3
+            let username  = prompt("Who is there?");
+            if(username === "Admin"){
+                let password = prompt("Password?");
+                if(password==="Themaster"){
+                    alert("Welcome");
+                } else if(pass ==="" || pass ===null){
+                    alert("Canceled");
+                } else{
+                    alert("Wrong password");
+                }
+            } else if (username ==="" || username ===null){
+                alert("Canceled");
+            }else{
+                alert("I do not know")
+            }
+            let i = 3;
+
+            while (i) {
+            alert( i-- );
+            }//1
+            i = 0;
+            while (++i < 5) alert( i );
+            i = 0;
+            while (i++ < 5) alert( i );
+            for(let x = 2; x <= 10; x++){
+                if(x%2==0) alert(i);
+            }
+            i = 0;
+            while(i<0){
+                alert( `number ${i}!` );
+                i++;
+            }
+            function checkAge(age) {
+            return (age > 18) ? true : confirm('Did parents allow you?');
+            }
+            function min(a, b) {
+                if (a < b) {
+                    return a;
+                } else {
+                    return b;
+                }
+            }
+            let ask = (question, yes, no) => {
+                if (confirm(question)) yes();
+                else no();
+            }
+            ask(
+            "Do you agree?",
+            function() { alert("You agreed."); },
+            function() { alert("You canceled the execution."); }
+            );
+        </script>
+</body>
+</html>
