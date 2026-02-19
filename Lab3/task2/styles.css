@@ -4,6 +4,7 @@ li {
     gap: 10px;
     margin: 10px 0;
     border: solid;
+    width:600px;
 }
 
 button {
