@@ -1,0 +1,12 @@
+.input{
+    border: solid;
+    padding: 10px;
+}
+#result{
+    font-size: 48px;
+    border: solid, blue;
+    width: 48px;
+    margin: 10px;
+    background-color: red;
+    color: azure;
+}
