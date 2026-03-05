@@ -1,0 +1,33 @@
+.card {
+  border: 1px solid #ccc;
+  padding: 15px;
+  border-radius: 10px;
+  width: 200px;
+  box-shadow: 1px 1px 5px rgba(0,0,0,0.1);
+}
+
+.watched {
+  background-color: #e0ffe0;
+}
+
+.not-watched {
+  background-color: #ffe0e0;
+}
+
+button {
+  margin-right: 5px;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.upvote {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.remove {
+  background-color: #f44336;
+  color: white;
+}

@@ -1,0 +1,17 @@
+<div class="card">
+  <h2>{{ product.name }}</h2>
+  <p class="price">{{ product.price | number }} ₸</p>
+
+  @if (product.inStock) {
+    <span class="badge in-stock">In Stock</span>
+  } @else {
+    <span class="badge out-stock">Out of Stock</span>
+  }
+
+  <p class="likes">❤ {{ product.likes }}</p>
+
+  <div class="buttons">
+    <button class="like-btn" (click)="like()">❤ Like</button>
+    <button class="delete-btn" (click)="remove()">Delete</button>
+  </div>
+</div>

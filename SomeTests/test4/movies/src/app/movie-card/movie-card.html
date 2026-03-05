@@ -1,0 +1,11 @@
+<div class="card" >
+  <h3>{{ movie.title }} ({{ movie.year }})</h3>
+  <p>
+    <span>Watched ✓</span>
+    <ng-template #notWatched>Not Watched</ng-template>
+  </p>
+  <p>Votes: {{ movie.votes }}</p>
+  <button (click)="
+  vote()" class="upvote">👍 {{ movie.votes }}</button>
+  <button (click)="remove()" class="remove">Remove</button>
+</div>

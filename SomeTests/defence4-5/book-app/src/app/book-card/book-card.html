@@ -1,0 +1,17 @@
+<div class="card">
+  <h2>{{ book.title }}</h2>
+  <p class="price">{{book.author}} </p>
+
+  @if (book.isAvailable) {
+    <span class="Available">Available</span>
+  } @else {
+    <span class="notAvailable">Borrowed</span>
+  }
+
+  <p class="favorites">❤ {{ book.favorites }}</p>
+
+  <div class="buttons">
+    <button class="like-btn" (click)="favorite()">Favorite</button>
+    <button class="delete-btn" (click)="remove()">Delete</button>
+  </div>
+</div>

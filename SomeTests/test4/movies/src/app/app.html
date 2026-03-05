@@ -1,0 +1,10 @@
+<h1>{{ title }}</h1>
+
+<div class="grid">
+  @for (movie of movies; track movie.id) {
+    <app-movie-card
+      [movie]="movie"
+      (delete)="deleteMovie($event)">
+    </app-movie-card>
+  }
+</div>

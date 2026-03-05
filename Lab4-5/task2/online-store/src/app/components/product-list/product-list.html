@@ -1,5 +1,12 @@
-<div class="grid">
-  @for (product of products; track product.id) {
-    <app-product-card [product]="product" />
+@if (visibleProducts.length > 0) {
+
+  @for (product of visibleProducts; track product.id) {
+    <app-product-item
+      [product]="product"
+      (delete)="deleteProduct($event)">
+    </app-product-item>
   }
-</div>
+
+} @else {
+  <p>No products in this category</p>
+}
