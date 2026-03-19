@@ -1,0 +1,16 @@
+<h2>Todos</h2>
+
+<div *ngIf="loading">
+</div>
+
+<ul *ngIf="!loading">
+
+  <li *ngFor="let user of users">
+
+    <a [routerLink]="['/todos', TodosComponent.id]">
+      <b>{{user.name}}</b> - {{user.email}}
+    </a>
+
+  </li>
+
+</ul>

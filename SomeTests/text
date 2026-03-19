@@ -1,0 +1,331 @@
+Ниже **пошагово что нужно сделать**, чтобы за **30 минут защитить Lab 6 (User Directory App)**. Я дам **каждый файл отдельно**, чтобы ты мог просто копировать.
+
+---
+
+# 1. Создать Angular проект
+
+В терминале:
+
+```bash
+ng new user-directory --routing
+cd user-directory
+ng serve
+```
+
+---
+
+# 2. Создать компоненты и сервис
+
+```bash
+ng generate component home
+ng generate component users
+ng generate component user-detail
+ng generate service services/user
+```
+
+---
+
+# 3. Добавить HttpClient
+
+Открой **app.module.ts**
+
+```ts
+import { HttpClientModule } from '@angular/common/http';
+
+@NgModule({
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    HttpClientModule
+  ]
+})
+```
+
+---
+
+# 4. Создать интерфейс User
+
+Создай файл:
+
+```
+src/app/models/user.ts
+```
+
+```ts
+export interface User {
+  id: number
+  name: string
+  email: string
+  phone: string
+}
+```
+
+---
+
+# 5. UserService
+
+Файл:
+
+```
+src/app/services/user.service.ts
+```
+
+```ts
+import { Injectable } from '@angular/core'
+import { HttpClient } from '@angular/common/http'
+import { Observable } from 'rxjs'
+import { User } from '../models/user'
+
+@Injectable({
+  providedIn: 'root'
+})
+export class UserService {
+
+  private apiUrl = 'https://jsonplaceholder.typicode.com/users'
+
+  constructor(private http: HttpClient) {}
+
+  getUsers(): Observable<User[]> {
+    return this.http.get<User[]>(this.apiUrl)
+  }
+
+  getUser(id: number): Observable<User> {
+    return this.http.get<User>(`${this.apiUrl}/${id}`)
+  }
+}
+```
+
+---
+
+# 6. Routing
+
+Файл:
+
+```
+app-routing.module.ts
+```
+
+```ts
+import { NgModule } from '@angular/core'
+import { RouterModule, Routes } from '@angular/router'
+import { HomeComponent } from './home/home.component'
+import { UsersComponent } from './users/users.component'
+import { UserDetailComponent } from './user-detail/user-detail.component'
+
+const routes: Routes = [
+
+  { path: 'home', component: HomeComponent },
+  { path: 'users', component: UsersComponent },
+  { path: 'users/:id', component: UserDetailComponent },
+
+  { path: '', redirectTo: '/home', pathMatch: 'full' }
+
+]
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { }
+```
+
+---
+
+# 7. AppComponent (navigation + router outlet)
+
+### app.component.html
+
+```html
+<nav class="navbar">
+
+  <a routerLink="/home" routerLinkActive="active">Home</a>
+  <a routerLink="/users" routerLinkActive="active">Users</a>
+
+</nav>
+
+<router-outlet></router-outlet>
+```
+
+---
+
+### app.component.css
+
+```css
+.navbar {
+  background: #333;
+  padding: 10px;
+}
+
+.navbar a {
+  color: white;
+  margin-right: 20px;
+  text-decoration: none;
+}
+
+.active {
+  font-weight: bold;
+  text-decoration: underline;
+}
+```
+
+---
+
+# 8. HomeComponent
+
+### home.component.html
+
+```html
+<h1>Welcome to User Directory</h1>
+
+<button routerLink="/users">
+  View Users
+</button>
+```
+
+---
+
+# 9. UsersComponent
+
+### users.component.ts
+
+```ts
+import { Component, OnInit } from '@angular/core'
+import { UserService } from '../services/user.service'
+import { User } from '../models/user'
+
+@Component({
+  selector: 'app-users',
+  templateUrl: './users.component.html'
+})
+export class UsersComponent implements OnInit {
+
+  users: User[] = []
+  loading = true
+
+  constructor(private userService: UserService) {}
+
+  ngOnInit(): void {
+    this.userService.getUsers().subscribe(data => {
+      this.users = data
+      this.loading = false
+    })
+  }
+}
+```
+
+---
+
+### users.component.html
+
+```html
+<h2>Users</h2>
+
+<div *ngIf="loading">
+  Loading users...
+</div>
+
+<ul *ngIf="!loading">
+
+  <li *ngFor="let user of users">
+
+    <a [routerLink]="['/users', user.id]">
+      <b>{{user.name}}</b> - {{user.email}}
+    </a>
+
+  </li>
+
+</ul>
+```
+
+---
+
+### users.component.css
+
+```css
+li {
+  padding: 10px;
+  list-style: none;
+}
+
+li:hover {
+  background: #f0f0f0;
+}
+```
+
+---
+
+# 10. UserDetailComponent
+
+### user-detail.component.ts
+
+```ts
+import { Component, OnInit } from '@angular/core'
+import { ActivatedRoute } from '@angular/router'
+import { UserService } from '../services/user.service'
+import { User } from '../models/user'
+
+@Component({
+  selector: 'app-user-detail',
+  templateUrl: './user-detail.component.html'
+})
+export class UserDetailComponent implements OnInit {
+
+  user!: User
+
+  constructor(
+    private route: ActivatedRoute,
+    private userService: UserService
+  ) {}
+
+  ngOnInit(): void {
+
+    const id = Number(this.route.snapshot.paramMap.get('id'))
+
+    this.userService.getUser(id).subscribe(data => {
+      this.user = data
+    })
+
+  }
+}
+```
+
+---
+
+### user-detail.component.html
+
+```html
+<div *ngIf="user">
+
+  <h2>{{user.name}}</h2>
+
+  <p>Email: {{user.email}}</p>
+  <p>Phone: {{user.phone}}</p>
+
+  <button routerLink="/users">
+    Back to Users
+  </button>
+
+</div>
+```
+
+---
+
+# 11. Что должно работать (для защиты)
+
+Проверь:
+
+✅ `/home` открывается
+✅ `/users` показывает список
+✅ клик на user → `/users/:id`
+✅ данные берутся через **UserService**
+✅ есть **loading**
+✅ используется **routerLink**
+✅ есть **interface User**
+
+---
+
+💡 **Если хочешь — я могу ещё показать:**
+
+* **как выглядит идеальная структура проекта (как у преподавателей)**
+* **какие 5 вопросов обычно задают на защите Angular Routing & HTTP**
+* **и ответы на них (чтобы сдать на 100%)**.

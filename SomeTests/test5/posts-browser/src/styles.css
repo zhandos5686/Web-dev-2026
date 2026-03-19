@@ -1,0 +1,26 @@
+.navbar {
+  background: #333;
+  padding: 10px;
+}
+
+.navbar a {
+  color: white;
+  margin-right: 15px;
+  text-decoration: none;
+}
+
+.navbar a.active {
+  font-weight: bold;
+}
+
+.post-card {
+  border: 1px solid gray;
+  padding: 15px;
+  margin: 10px;
+  border-radius: 5px;
+}
+
+.post-card:hover {
+  background: #f2f2f2;
+  cursor: pointer;
+}

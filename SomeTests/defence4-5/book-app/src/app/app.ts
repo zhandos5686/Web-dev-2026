@@ -3,7 +3,7 @@ import { Book } from './book.model';
 import { BookCardComponent } from '../app/book-card/book-card';
 
 @Component({
-  selector: 'app-root',
+  selector: 'app-root', 
   imports: [BookCardComponent],
   templateUrl: './app.html',
   styleUrl: './app.css'
