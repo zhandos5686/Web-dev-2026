@@ -1,0 +1,14 @@
+<div>
+  <img [src]="product().image" width="150">
+
+  <h3>{{ product().name }}</h3>
+  <p>{{ product().description }}</p>
+  <p>Price: {{ product().price }}</p>
+  <p>Rating: {{ product().rating }}</p>
+
+  <p>❤️ {{ product().likes }}</p>
+
+  <button (click)="like()">Like</button>
+  <button (click)="remove()">Delete</button>
+  <button (click)="share()">Share</button>
+</div>

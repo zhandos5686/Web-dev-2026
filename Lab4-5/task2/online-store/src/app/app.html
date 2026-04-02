@@ -1,1 +1,16 @@
-<router-outlet />
+<h1>Online Store</h1>
+
+<div>
+  @for (cat of categories; track cat.id) {
+    <button (click)="selectCategory(cat.id)">
+      {{ cat.name }}
+    </button>
+  }
+</div>
+
+@if (selectedCategoryId) {
+  <app-product-list [products]="products">
+  </app-product-list>
+} @else {
+  <p>Выберите категорию</p>
+}

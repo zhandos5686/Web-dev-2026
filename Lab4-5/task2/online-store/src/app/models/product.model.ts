@@ -4,9 +4,8 @@ export interface Product {
   description: string;
   price: number;
   rating: number;
-  likes: number;
-  categoryId: number; 
   image: string;
-  images: string[];
   link: string;
+  likes: number;
+  categoryId: number;
 }

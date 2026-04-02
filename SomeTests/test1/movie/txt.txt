@@ -1,0 +1,196 @@
+Perfect! Let’s go **step by step** and I’ll give you the Django Movie API ready to run. I’ll also show you how to get JSON responses without using Django REST Framework (DRF), which is simpler for a first API.
+
+---
+
+## **1. Project Setup**
+
+1. **Create virtual environment and activate**
+
+```bash
+python -m venv venv
+# Windows
+venv\Scripts\activate
+# Mac/Linux
+source venv/bin/activate
+```
+
+2. **Install Django**
+
+```bash
+pip install django
+```
+
+3. **Create project**
+
+```bash
+django-admin startproject movie_project
+cd movie_project
+```
+
+4. **Create app**
+
+```bash
+python manage.py startapp api
+```
+
+5. **Register app** in `movie_project/settings.py`
+
+```python
+INSTALLED_APPS = [
+    ...
+    'api',
+]
+```
+
+---
+
+## **2. Create Movie Model**
+
+In `api/models.py`:
+
+```python
+from django.db import models
+
+class Movie(models.Model):
+    title = models.CharField(max_length=200)
+    director = models.CharField(max_length=100)
+    year = models.IntegerField()
+    rating = models.FloatField()
+
+    def __str__(self):
+        return f"{self.title} ({self.year})"
+```
+
+Run migrations:
+
+```bash
+python manage.py makemigrations
+python manage.py migrate
+```
+
+---
+
+## **3. Register Model in Admin & Add Data**
+
+In `api/admin.py`:
+
+```python
+from django.contrib import admin
+from .models import Movie
+
+admin.site.register(Movie)
+```
+
+Create superuser:
+
+```bash
+python manage.py createsuperuser
+# Follow prompts to add username/password
+```
+
+Run server:
+
+```bash
+python manage.py runserver
+```
+
+Go to `http://127.0.0.1:8000/admin/`, log in with superuser, and add **at least 3 movies**.
+
+---
+
+## **4. Create API Endpoints**
+
+In `api/views.py`:
+
+```python
+from django.http import JsonResponse
+from .models import Movie
+
+# List all movies
+def movie_list(request):
+    movies = Movie.objects.all().values('id', 'title', 'director', 'year', 'rating')
+    return JsonResponse(list(movies), safe=False)
+
+# Get movie by ID
+def movie_detail(request, id):
+    try:
+        movie = Movie.objects.get(id=id)
+        data = {
+            'id': movie.id,
+            'title': movie.title,
+            'director': movie.director,
+            'year': movie.year,
+            'rating': movie.rating
+        }
+        return JsonResponse(data)
+    except Movie.DoesNotExist:
+        return JsonResponse({'error': 'Movie not found'}, status=404)
+```
+
+---
+
+## **5. Add URLs**
+
+In `api/urls.py`:
+
+```python
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('movies/', views.movie_list),
+    path('movies/<int:id>/', views.movie_detail),
+]
+```
+
+In `movie_project/urls.py`, include the API URLs:
+
+```python
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('api/', include('api.urls')),
+]
+```
+
+---
+
+## **6. Test the API**
+
+Run server:
+
+```bash
+python manage.py runserver
+```
+
+Open in browser or Postman:
+
+* `http://127.0.0.1:8000/api/movies/` → List all movies
+* `http://127.0.0.1:8000/api/movies/1/` → Movie with ID=1
+
+**Example JSON output:**
+
+```json
+[
+    {"id":1,"title":"Inception","director":"Christopher Nolan","year":2010,"rating":8.8},
+    {"id":2,"title":"Interstellar","director":"Christopher Nolan","year":2014,"rating":8.6},
+    {"id":3,"title":"The Matrix","director":"Wachowski Brothers","year":1999,"rating":8.7}
+]
+```
+
+---
+
+✅ **All requirements covered:**
+
+* Virtual environment activated
+* Movie model with 4 fields
+* `/api/movies/` and `/api/movies/<id>/` return valid JSON
+* Data added via Django admin visible in API
+
+---
+
+If you want, I can also make it **so the API supports POST, PUT, DELETE** like a real REST API **without installing Django REST Framework**. This will make it fully interactive.
+
+Do you want me to do that next?

@@ -1,0 +1,196 @@
+Окей, вот тебе **готовое решение для защиты (копируешь и делаешь)** 👇
+
+---
+
+# 🔥 1. Создание проекта
+
+```bash
+python -m venv venv
+venv\Scripts\activate   # Windows
+
+pip install django
+django-admin startproject book_project
+cd book_project
+python manage.py startapp api
+```
+
+---
+
+# 🔥 2. settings.py
+
+```python
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+
+    'api',  # 👈 ДОБАВЬ
+]
+```
+
+---
+
+# 🔥 3. Модель (api/models.py)
+
+```python
+from django.db import models
+
+class Book(models.Model):
+    title = models.CharField(max_length=200)
+    author = models.CharField(max_length=100)
+    pages = models.IntegerField()
+    is_available = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.title
+```
+
+---
+
+# 🔥 4. Миграции
+
+```bash
+python manage.py makemigrations
+python manage.py migrate
+```
+
+---
+
+# 🔥 5. admin.py
+
+```python
+from django.contrib import admin
+from .models import Book
+
+admin.site.register(Book)
+```
+
+---
+
+# 🔥 6. Создать суперпользователя
+
+```bash
+python manage.py createsuperuser
+```
+
+👉 зайди:
+`http://127.0.0.1:8000/admin`
+и добавь **3 книги**
+
+---
+
+# 🔥 7. Views (api/views.py)
+
+```python
+from django.http import JsonResponse
+from .models import Book
+
+# /api/books/
+def get_books(request):
+    books = list(Book.objects.values())
+    return JsonResponse(books, safe=False)
+
+
+# /api/books/<id>/
+def get_book(request, id):
+    try:
+        book = Book.objects.values().get(id=id)
+        return JsonResponse(book)
+    except Book.DoesNotExist:
+        return JsonResponse({'error': 'Book not found'}, status=404)
+```
+
+---
+
+# 🔥 8. URL (api/urls.py)
+
+Создай файл:
+
+```python
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('books/', views.get_books),
+    path('books/<int:id>/', views.get_book),
+]
+```
+
+---
+
+# 🔥 9. Главный urls (book_project/urls.py)
+
+```python
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('api/', include('api.urls')),
+]
+```
+
+---
+
+# 🔥 10. Запуск
+
+```bash
+python manage.py runserver
+```
+
+---
+
+# 🔥 11. Проверка (ОБЯЗАТЕЛЬНО на защите)
+
+Открой в браузере:
+
+### ✅ Все книги
+
+```
+http://127.0.0.1:8000/api/books/
+```
+
+👉 получишь:
+
+```json
+[
+  {
+    "id": 1,
+    "title": "Book1",
+    "author": "Author1",
+    "pages": 100,
+    "is_available": true
+  }
+]
+```
+
+---
+
+### ✅ Одна книга
+
+```
+http://127.0.0.1:8000/api/books/1/
+```
+
+---
+
+# 🔥 Что сказать преподавателю
+
+> “I created a Django project with a Book model and implemented two API endpoints that return JSON responses using JsonResponse.”
+
+---
+
+# 💡 Если хочешь апнуть уровень (bonus)
+
+Скажи:
+
+> “This is a basic REST-like API without Django REST Framework.”
+
+---
+
+Если хочешь — могу:
+✅ сделать тебе **версию с DRF (будет +баллы)**
+✅ или подготовить **готовый архив проекта**
