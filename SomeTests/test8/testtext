@@ -1,0 +1,238 @@
+Вот тебе чёткий **пошаговый гайд**, чтобы за 30 минут всё собрать и защитить 👇
+
+---
+
+# 🚀 1. Project Setup
+
+### ✅ Создай виртуальное окружение
+
+```bash
+python -m venv venv
+venv\Scripts\activate   # Windows
+```
+
+### ✅ Установи зависимости
+
+```bash
+pip install django djangorestframework
+```
+
+### ✅ Создай проект
+
+```bash
+django-admin startproject book_project
+cd book_project
+```
+
+### ✅ Создай приложение
+
+```bash
+python manage.py startapp api
+```
+
+---
+
+# ⚙️ 2. Настрой settings.py
+
+Открой `book_project/settings.py` и добавь:
+
+```python
+INSTALLED_APPS = [
+    ...
+    'rest_framework',
+    'api',
+]
+```
+
+---
+
+# 📚 3. Создай модель Book
+
+📄 `api/models.py`
+
+```python
+from django.db import models
+
+class Book(models.Model):
+    title = models.CharField(max_length=200)
+    author = models.CharField(max_length=100)
+    price = models.FloatField()
+    in_stock = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.title
+```
+
+---
+
+# 🧱 4. Миграции
+
+```bash
+python manage.py makemigrations
+python manage.py migrate
+```
+
+---
+
+# 🔐 5. Admin + superuser
+
+📄 `api/admin.py`
+
+```python
+from django.contrib import admin
+from .models import Book
+
+admin.site.register(Book)
+```
+
+Создай админа:
+
+```bash
+python manage.py createsuperuser
+```
+
+Запусти сервер:
+
+```bash
+python manage.py runserver
+```
+
+👉 Зайди в:
+`http://127.0.0.1:8000/admin/`
+Добавь **минимум 3 книги**
+
+---
+
+# 🔄 6. Serializer
+
+📄 `api/serializers.py`
+
+```python
+from rest_framework import serializers
+from .models import Book
+
+class BookSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Book
+        fields = '__all__'
+```
+
+---
+
+# 🎯 7. ViewSet
+
+📄 `api/views.py`
+
+```python
+from rest_framework import viewsets
+from .models import Book
+from .serializers import BookSerializer
+
+class BookViewSet(viewsets.ModelViewSet):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+```
+
+---
+
+# 🌐 8. Router
+
+📄 `api/urls.py`
+
+```python
+from rest_framework.routers import DefaultRouter
+from .views import BookViewSet
+
+router = DefaultRouter()
+router.register(r'books', BookViewSet)
+
+urlpatterns = router.urls
+```
+
+---
+
+# 🔗 9. Подключи URLs
+
+📄 `book_project/urls.py`
+
+```python
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('api/', include('api.urls')),
+]
+```
+
+---
+
+# 🧪 10. Тестирование (ВАЖНО для защиты)
+
+Открой браузер или Postman:
+
+### 📌 Список книг
+
+```
+GET http://127.0.0.1:8000/api/books/
+```
+
+### 📌 Получить по ID
+
+```
+GET http://127.0.0.1:8000/api/books/1/
+```
+
+### 📌 Создать книгу
+
+```
+POST http://127.0.0.1:8000/api/books/
+```
+
+Body (JSON):
+
+```json
+{
+  "title": "Clean Code",
+  "author": "Robert Martin",
+  "price": 25.5,
+  "in_stock": true
+}
+```
+
+---
+
+# ✅ Чек-лист для защиты
+
+Перед сдачей убедись:
+
+✔ DRF установлен
+✔ Есть `Book` модель
+✔ Есть `BookSerializer` (ModelSerializer)
+✔ Есть `BookViewSet` (ModelViewSet)
+✔ Есть `DefaultRouter`
+✔ Работают GET и POST
+
+---
+
+# 💡 Что могут спросить на защите
+
+Будь готов ответить:
+
+* ❓ Что делает `ModelSerializer`
+  👉 Автоматически создаёт поля на основе модели
+
+* ❓ Что делает `ModelViewSet`
+  👉 Даёт CRUD (list, create, retrieve, update, delete)
+
+* ❓ Зачем `DefaultRouter`
+  👉 Автоматически создаёт URL
+
+* ❓ Разница GET и POST
+  👉 GET — получить, POST — создать
+
+---
+
+Если хочешь, могу:
+👉 накинуть **типичные вопросы преподавателя + ответы**
+👉 или дать **ошибки, на которых валят (очень полезно)**
